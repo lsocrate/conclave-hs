@@ -1,3 +1,3 @@
 module ECS.Entity (Entity) where
 
-type Entity = Integer
+type Entity = Int

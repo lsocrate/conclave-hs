@@ -28,6 +28,7 @@ library
       ECS.Component
       ECS.Entity
       ECS.World
+      Entity.Player
       Entity.Prompt
       Entity.Turn
       Entity.World
