@@ -1,21 +1,35 @@
-module ECS.World (init, create, emplace) where
+module ECS.World (empty, create, emplace, World) where
 
-import           Prelude hiding (init)
-import           ECS.Component (Component)
 import qualified Data.Map.Strict as Map
+import Data.Set (Set)
+import qualified Data.Set as Set
+import ECS.Component (Component)
+import ECS.Entity (Entity)
 
-type Entity = Integer
-
-data World = World [Entity] (Map.Map Entity Component)
+data World = World {entities :: [Entity], components :: Map.Map Entity (Set Component)}
   deriving (Show)
 
-init :: World
-init = World [] Map.empty
+empty :: World
+empty = World{entities = [], components = Map.empty}
 
-create :: World -> (World, Entity)
-create (World [] cs) = (World [1] cs, 1)
-create (World (x:xs) cs) = let next = x + 1
-                           in (World ([next, x] ++ xs) cs, next)
+create :: World -> (Entity, World)
+create (World{entities = []}) = (1, World{entities = [1], components = Map.empty})
+create (World{entities = es, components = cs}) =
+  ( nextEntity es
+  , World
+      { entities = nextEntity es : es
+      , components = cs
+      }
+  )
 
-emplace :: World -> Entity -> Component -> World
-emplace (World es ecs) e c = World es (Map.insert e c ecs)
+nextEntity :: [Entity] -> Entity
+nextEntity [] = 1
+nextEntity (e : es) = e + 1
+
+-- FIX. It's replacing instead of adding
+emplace :: Entity -> Component -> World -> World
+emplace e c world = world{components = Map.insert e (Set.singleton c) (components world)}
+
+-- FIX THIS
+emplaceAll :: Entity -> Set Component -> World -> World
+emplaceAll e cs world = world{components = Map.insert e cs (components world)}

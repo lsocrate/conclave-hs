@@ -1,10 +1,9 @@
-module Entity.World
-  ( 
-  World(..), create
-  )
-where
+module Entity.World (
+  World (..),
+  create,
+) where
 
-import Entity.Prompt ( Prompt(NoPrompt) )
+import Entity.Prompt (Prompt (NoPrompt))
 import Entity.Turn
 
 data World = World
@@ -14,6 +13,8 @@ data World = World
   deriving (Show)
 
 create :: World
-create = World { prompt = NoPrompt
-  , turn = Turn {phase = BeginningPhase CityDeckStep }
-  }
+create =
+  World
+    { prompt = NoPrompt
+    , turn = Turn{phase = BeginningPhase CityDeckStep}
+    }

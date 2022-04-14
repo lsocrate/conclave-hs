@@ -1,9 +1,8 @@
-module Entity.Prompt
-  ( Prompt (..),
-  )
-where
+module Entity.Prompt (
+  Prompt (..),
+) where
 
 data Prompt
   = NoPrompt
-  | SinglePlayerConfirm {message :: String }
+  | SinglePlayerConfirm {message :: String}
   deriving (Show)
