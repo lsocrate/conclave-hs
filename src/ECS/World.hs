@@ -9,7 +9,7 @@ import Data.Function ((&))
 import qualified Data.Map.Strict as Map
 import Data.Set (Set)
 import qualified Data.Set as Set
-import ECS.Component (Component (ResourceToken))
+import ECS.Component (Component)
 import qualified ECS.Component as C
 import ECS.Entity (Entity)
 import Entity.Player
@@ -27,12 +27,10 @@ for4Players :: World Game4Player
 for4Players = worldWithPlayers playersFor4Player
 
 worldWithPlayers :: Eq gp => Set gp -> World gp
-worldWithPlayers ps = World{players = ps, components = comps}
- where
-  comps = Set.foldl thing [] ps & Map.fromDescList
+worldWithPlayers ps = World{players = ps, components = Map.fromDescList $ Set.foldl addTokensForPlayer [] ps}
 
-thing :: Eq gp => [(Entity, Set (Component gp))] -> gp -> [(Entity, Set (Component gp))]
-thing cs p =
+addTokensForPlayer :: Eq gp => [(Entity, Set (Component gp))] -> gp -> [(Entity, Set (Component gp))]
+addTokensForPlayer cs p =
   ( reverse
       [ (x, Set.fromAscList [C.ResourceToken C.Prestige, C.PlayerOwned (Just p)])
       | x <- take 32 $ iterate (+ 1) (length cs)
