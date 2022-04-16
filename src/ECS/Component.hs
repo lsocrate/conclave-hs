@@ -10,8 +10,7 @@ import ECS.Entity
 import qualified Entity.Turn as Turn
 
 data Component gp
-  = Player {playerNumber :: PlayerNumber, color :: Color, roundsPlayed :: Int}
-  | Round Int Turn.Turn
+  = Round Int Turn.Turn
   | GeneralSupply {generalSupplyTokens :: IntSet}
   | Token
   | AgendaToken
@@ -19,9 +18,9 @@ data Component gp
   | LeaderToken
   | RivalToken {playerNumber :: PlayerNumber}
   | ColoredToken {color :: Color}
-  | PlayerControlled {playerNumber :: PlayerNumber}
   | ResourceToken {resourceType :: ResourceType}
-  | PlayerOwned {owner :: Maybe gp}
+  | PlayerOwned {owner :: gp}
+  | PlayerControlled {controller :: gp}
   deriving (Show, Eq)
 
 data Color

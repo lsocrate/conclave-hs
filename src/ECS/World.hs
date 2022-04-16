@@ -32,8 +32,13 @@ worldWithPlayers ps = World{players = ps, components = Map.fromDescList $ Set.fo
 addTokensForPlayer :: Eq gp => [(Entity, Set (Component gp))] -> gp -> [(Entity, Set (Component gp))]
 addTokensForPlayer cs p =
   ( reverse
-      [ (x, Set.fromAscList [C.ResourceToken C.Prestige, C.PlayerOwned (Just p)])
+      [ ( x
+        , Set.fromDistinctAscList $
+            [C.PlayerControlled p | firstTwenty]
+            ++ [C.PlayerOwned p, C.ResourceToken C.Prestige, C.Token]
+        )
       | x <- take 32 $ iterate (+ 1) (length cs)
+      , let firstTwenty = x <= (length cs + 20)
       ]
   )
     ++ cs

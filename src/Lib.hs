@@ -14,7 +14,7 @@ import qualified ECS.World as World
 someFunc :: IO ()
 someFunc =
   do
-    World.for2Players
+    World.for4Players
     & print
 
 -- loop :: World.World -> World.World
